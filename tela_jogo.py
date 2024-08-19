@@ -16,7 +16,7 @@ background = pygame.image.load('imagens/fundo.jpg')
 
 # Carregando o personagem pato
 pato = pygame.image.load('imagens/patinho.png')
-pato_redimensionado = pygame.transform.scale(pato, (50, 50))
+pato_redimensionado = pygame.transform.scale(pato, (60, 60))
 
 # Carregando o personagem gato 1 e 2
 gato1 = pygame.image.load('imagens/gatinho_sentado.png')
@@ -36,12 +36,15 @@ gato1_pos = [270,178]
 gato2_pos = [420,102]
 
 # Definindo variáveis para o pato
-pato_pos = [50, 300]  
+pato_pos = [20, 300]  
 pato_vel = [0, 0]     
 pato_lancado = False  
 
 # Definindo a gravidade
 gravidade = 0.0005
+
+# Definindo a resistência do ar
+resistencia_ar = 1
 
 # Função para verificar colisão
 def colisao(pato_rect, gato_rect):
@@ -54,8 +57,8 @@ gato2_acertado = False
 
 # Função para desenhar a trajetória pontilhada
 def desenhar_trajetoria(screen, start_pos, angle, velocidade_inicial, gravidade):
-    num_pontos = 30  # Número de pontos da trajetória
-    distancia_entre_pontos = 100  # Aumentando a distância entre pontos
+    num_pontos = 30  
+    distancia_entre_pontos = 100  
     for i in range(num_pontos):
         # Calculando a posição futura do pato com base no ângulo e velocidade
         t = i * distancia_entre_pontos / 50   
@@ -76,7 +79,7 @@ while running:
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                jogo_iniciado = True  # Muda o estado para iniciar o jogo
+                jogo_iniciado = True  
     else:
         # Loop do jogo após a tela inicial
         for event in pygame.event.get():
@@ -108,6 +111,10 @@ while running:
             # Aplica a gravidade no eixo Y
             pato_vel[1] += gravidade
 
+            # Aplica resistencia do ar
+            pato_vel[0] *= resistencia_ar
+            pato_vel[1] *= resistencia_ar
+            
             # Atualiza a posição do pato com base na velocidade
             pato_pos[0] += pato_vel[0]
             pato_pos[1] += pato_vel[1]
@@ -121,7 +128,7 @@ while running:
         # Desenhando a imagem de fundo
         screen.blit(background, (0, 0))
 
-    # Desenhando a trajetória pontilhada antes do lançamento
+        # Desenhando a trajetória pontilhada antes do lançamento
         if not pato_lancado:
             # Obtendo a posição atual do mouse para desenhar a trajetória
             mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -132,8 +139,10 @@ while running:
             # Desenhar a trajetória pontilhada
             desenhar_trajetoria(screen, pato_pos, angulo, 0.5, gravidade)
 
+        # Desenhando o pato na tela após desenhar a trajetória
+        screen.blit(pato_redimensionado, pato_pos)
+
         # Desenhando os personagens na tela e verificando se o gato foi acertado
-        screen.blit(pato_redimensionado,pato_pos)
         if gato1_acertado:
             screen.blit(gatinho_perdendo_redimensionado, gato1_pos)
         else:
@@ -160,7 +169,6 @@ while running:
             pato_pos = [50, 300]   
             pato_lancado = False 
 
-        
         # Atualizando a tela
         pygame.display.flip()
 
