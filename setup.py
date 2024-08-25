@@ -1,19 +1,23 @@
 from setuptools import setup, find_packages
+import os
 
 # Lendo o conteúdo do README.md para usar como descrição longa
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+# Função para coletar arquivos de uma pasta específica
+def package_files(directory):
+    paths = []
+    for (path, _ , filenames) in os.walk(directory):
+        for filename in filenames:
+            paths.append(os.path.join(path,filename))
+    return paths
+
+imagens_file = package_files('imagens')
+fonte_file = package_files('fonte')
+
 setup(
-    name="Versao-angry-birds",  # Substitua pelo nome do seu pacote
-    options= {
-        "build.exe":{
-            "include_files":{
-                ("imagens","imagens"),
-                ("fonte","fonte"),
-            }
-        }
-    },   
+    name="Versao-angry-birds",  # Substitua pelo nome do seu pacote   
     version="0.1.0",
     author="Ana Beatriz da Cunha",
     author_email="anabc1@al.insper.edu.br",
@@ -36,4 +40,9 @@ setup(
     install_requires=[  # Instala as dependências especificadas no requirements.txt
         line.strip() for line in open("requirements.txt").readlines()
     ],
+
+    include_package_data=True,
+    package_data={
+        '': imagens_files + fonte_files
+    }
 )
