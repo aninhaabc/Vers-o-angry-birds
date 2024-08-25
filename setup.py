@@ -6,6 +6,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="Versao-angry-birds",  # Substitua pelo nome do seu pacote
+    options= {
+        "build.exe":{
+            "include_files":{
+                ("imagens","imagens"),
+                ("fonte","fonte"),
+            }
+        }
+    },   
     version="0.1.0",
     author="Ana Beatriz da Cunha",
     author_email="anabc1@al.insper.edu.br",
