@@ -1,23 +1,24 @@
 import pygame
 import math
 from jogo.tela_inicial import tela_inicial
+from jogo.tela_final import tela_final
 
 lua_pos = [80, 80]
-forca_repulsao_lua = 0.00003
+gravidade_lua = 0.008
 
 # Função para verificar colisão
 def colisao(pato_rect, gato_rect):
     return pato_rect.colliderect(gato_rect)
 
 # Função para desenhar a trajetória pontilhada
-def desenhar_trajetoria(screen, start_pos, angle, velocidade_inicial, gravidade):
+def desenhar_trajetoria(screen, start_pos, angle, velocidade_inicial, gravidade, resistencia_ar):
     num_pontos = 30
     distancia_entre_pontos = 100
     for i in range(num_pontos):
         # Calculando a posição futura do pato com base no ângulo e velocidade
         trajetoria = (i * distancia_entre_pontos / 50) * 30
-        futuro_x = (start_pos[0] + 50) / 2 + math.cos(angle) * velocidade_inicial * trajetoria
-        futuro_y = start_pos[1] + 25 + math.sin(angle) * velocidade_inicial * trajetoria + 0.5 * gravidade * (trajetoria) ** 2
+        futuro_x = (start_pos[0] + 50) / 2 + math.cos(angle) * velocidade_inicial * trajetoria + gravidade_lua + resistencia_ar
+        futuro_y = start_pos[1] + 25 + math.sin(angle) * velocidade_inicial * trajetoria + 0.5 * gravidade * (trajetoria) ** 2 + gravidade_lua + resistencia_ar
 
         # Desenhar um pequeno círculo para simular o ponto
         pygame.draw.circle(screen, (255, 255, 255), (int(futuro_x), int(futuro_y)), 3)
@@ -28,9 +29,11 @@ def aplicar_repulsao_lua(pato_pos, pato_vel):
     delta_y = pato_pos[1] - lua_pos[1]
     distancia = math.sqrt(delta_x ** 2 + delta_y ** 2)
     
+    forca_lua = gravidade_lua / distancia
+
     if distancia != 0:  # Evita divisão por zero
-        forca_x = (delta_x / distancia) * forca_repulsao_lua
-        forca_y = (delta_y / distancia) * forca_repulsao_lua
+        forca_x = (delta_x / distancia) * forca_lua
+        forca_y = (delta_y / distancia) * forca_lua
 
         pato_vel[0] += forca_x
         pato_vel[1] += forca_y
@@ -40,6 +43,7 @@ def main():
     pygame.init()
 
     jogo_iniciado = False
+    jogo_finalizado = False
 
     # Configurando a tela
     screen = pygame.display.set_mode((564,443))
@@ -82,8 +86,6 @@ def main():
 
     # Definindo a resistência do ar
     resistencia_ar = 1.000005
-
-    # Variáveis da gravidade da lua
     
     ultimo_tempo_forca_lua = pygame.time.get_ticks()
 
@@ -102,8 +104,9 @@ def main():
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    jogo_iniciado = True  
-        else:
+                    jogo_iniciado = True
+
+        elif not jogo_finalizado:
             # Loop do jogo após a tela inicial
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -142,7 +145,7 @@ def main():
                 tempo_atual = pygame.time.get_ticks()
                 if tempo_atual - ultimo_tempo_forca_lua :
                     aplicar_repulsao_lua(pato_pos, pato_vel)
-                    ultimo_tempo_repulsao_lua = tempo_atual  # Atualiza o tempo da última aplicação de gravidade da lua
+    
 
                 # Atualiza a posição do pato com base na velocidade
                 pato_pos[0] += pato_vel[0]
@@ -169,7 +172,7 @@ def main():
                 angulo = math.atan2(delta_y, delta_x)
 
                 # Desenhar a trajetória pontilhada
-                desenhar_trajetoria(screen, pato_pos, angulo, 0.5, gravidade)
+                desenhar_trajetoria(screen, pato_pos, angulo, 0.5, gravidade,resistencia_ar)
 
             # Desenhando o pato na tela após desenhar a trajetória
             screen.blit(pato_redimensionado, pato_pos)
@@ -178,12 +181,15 @@ def main():
             if gato1_acertado:
                 screen.blit(gatinho_perdendo_redimensionado, gato1_pos)
             else:
-                screen.blit(gato1_redimensionado, gato1_pos)
-
+                screen.blit(gato1_redimensionado,gato1_pos)
+            
             if gato2_acertado:
                 screen.blit(gatinho_perdendo_redimensionado, gato2_pos)
             else:
-                screen.blit(gato2_redimensionado, gato2_pos)
+                screen.blit(gato2_redimensionado,gato2_pos)
+
+            if gato1_acertado and gato2_acertado:
+                jogo_finalizado = True
 
             # Retangulo de colisão para o pato e os gatos
             pato_rect = pygame.Rect(pato_pos[0], pato_pos[1], 50, 50)
@@ -203,6 +209,9 @@ def main():
 
             # Atualizando a tela
             pygame.display.flip()
+        
+        else:
+            tela_final(screen)
 
     # Encerrando o pygame
     pygame.quit()
