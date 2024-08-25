@@ -88,118 +88,123 @@ def aplicar_repulsao_lua(pato_pos, pato_vel):
         pato_vel[0] += forca_x
         pato_vel[1] += forca_y
 
-# Loop principal
-running = True
-while running:
-    if not jogo_iniciado:
-        tela_inicial(screen)  # Chama a função tela_inicial de tela_inicial.py
+def main():
+    # Loop principal
+    running = True
+    while running:
+        if not jogo_iniciado:
+            tela_inicial(screen)  # Chama a função tela_inicial de tela_inicial.py
 
-        # Aguarda o clique do mouse para iniciar o jogo
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                jogo_iniciado = True  
-    else:
-        # Loop do jogo após a tela inicial
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+            # Aguarda o clique do mouse para iniciar o jogo
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    jogo_iniciado = True  
+        else:
+            # Loop do jogo após a tela inicial
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
 
-            # Detecta o clique do mouse para arremessar
-            if event.type == pygame.MOUSEBUTTONDOWN and not pato_lancado:
-                # Obtém a posição do clique
+                # Detecta o clique do mouse para arremessar
+                if event.type == pygame.MOUSEBUTTONDOWN and not pato_lancado:
+                    # Obtém a posição do clique
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+
+                    # Calcula o vetor de arremesso (diferença entre pato e posição do clique)
+                    delta_x = mouse_x - pato_pos[0]
+                    delta_y = mouse_y - pato_pos[1]
+
+                    # Calcula a magnitude da velocidade (baseado na distância do clique)
+                    velocidade_inicial = 0.5
+
+                    # Normaliza o vetor e define a velocidade inicial
+                    angulo = math.atan2(delta_y, delta_x)
+                    pato_vel[0] = math.cos(angulo) * velocidade_inicial 
+                    pato_vel[1] = math.sin(angulo) * velocidade_inicial  
+
+                    # Marca que o pato foi lançado
+                    pato_lancado = True
+
+            # Atualizando a posição do pato se ele foi lançado
+            if pato_lancado:
+                # Aplica a gravidade no eixo Y
+                pato_vel[1] += gravidade
+
+                # Aplica resistencia do ar
+                pato_vel[0] *= resistencia_ar
+                pato_vel[1] *= resistencia_ar
+
+                # Verifica o tempo atual para aplicar a gravidade da lua periodicamente
+                tempo_atual = pygame.time.get_ticks()
+                if tempo_atual - ultimo_tempo_forca_lua :
+                    aplicar_repulsao_lua(pato_pos, pato_vel)
+                    ultimo_tempo_repulsao_lua = tempo_atual  # Atualiza o tempo da última aplicação de gravidade da lua
+
+                # Atualiza a posição do pato com base na velocidade
+                pato_pos[0] += pato_vel[0]
+                pato_pos[1] += pato_vel[1]
+
+                # Verifica se o pato saiu da tela e reseta
+                if pato_pos[1] > 443 or pato_pos[0] > 564:
+                    pato_pos = [20, 300]
+                    pato_vel = [0, 0]
+                    pato_lancado = False
+
+            # Desenhando a imagem de fundo
+            screen.blit(background, (0, 0))
+
+            # Desenhando a lua
+            screen.blit(lua_redimensionado, (50,40))
+
+            # Desenhando a trajetória pontilhada antes do lançamento
+            if not pato_lancado:
+                # Obtendo a posição atual do mouse para desenhar a trajetória
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-
-                # Calcula o vetor de arremesso (diferença entre pato e posição do clique)
                 delta_x = mouse_x - pato_pos[0]
                 delta_y = mouse_y - pato_pos[1]
-
-                # Calcula a magnitude da velocidade (baseado na distância do clique)
-                velocidade_inicial = 0.5
-
-                # Normaliza o vetor e define a velocidade inicial
                 angulo = math.atan2(delta_y, delta_x)
-                pato_vel[0] = math.cos(angulo) * velocidade_inicial 
-                pato_vel[1] = math.sin(angulo) * velocidade_inicial  
 
-                # Marca que o pato foi lançado
-                pato_lancado = True
+                # Desenhar a trajetória pontilhada
+                desenhar_trajetoria(screen, pato_pos, angulo, 0.5, gravidade)
 
-        # Atualizando a posição do pato se ele foi lançado
-        if pato_lancado:
-            # Aplica a gravidade no eixo Y
-            pato_vel[1] += gravidade
+            # Desenhando o pato na tela após desenhar a trajetória
+            screen.blit(pato_redimensionado, pato_pos)
 
-            # Aplica resistencia do ar
-            pato_vel[0] *= resistencia_ar
-            pato_vel[1] *= resistencia_ar
+            # Desenhando os personagens na tela e verificando se o gato foi acertado
+            if gato1_acertado:
+                screen.blit(gatinho_perdendo_redimensionado, gato1_pos)
+            else:
+                screen.blit(gato1_redimensionado, gato1_pos)
 
-            # Verifica o tempo atual para aplicar a gravidade da lua periodicamente
-            tempo_atual = pygame.time.get_ticks()
-            if tempo_atual - ultimo_tempo_forca_lua :
-                aplicar_repulsao_lua(pato_pos, pato_vel)
-                ultimo_tempo_repulsao_lua = tempo_atual  # Atualiza o tempo da última aplicação de gravidade da lua
+            if gato2_acertado:
+                screen.blit(gatinho_perdendo_redimensionado, gato2_pos)
+            else:
+                screen.blit(gato2_redimensionado, gato2_pos)
 
-            # Atualiza a posição do pato com base na velocidade
-            pato_pos[0] += pato_vel[0]
-            pato_pos[1] += pato_vel[1]
+            # Retangulo de colisão para o pato e os gatos
+            pato_rect = pygame.Rect(pato_pos[0], pato_pos[1], 50, 50)
+            gato1_rect = pygame.Rect(gato1_pos[0], gato1_pos[1], 50, 50)
+            gato2_rect = pygame.Rect(gato2_pos[0], gato2_pos[1], 50, 50)
 
-            # Verifica se o pato saiu da tela e reseta
-            if pato_pos[1] > 443 or pato_pos[0] > 564:
-                pato_pos = [20, 300]
-                pato_vel = [0, 0]
-                pato_lancado = False
+            # Verificar colisões
+            if colisao(pato_rect, gato1_rect) and not gato1_acertado:
+                gato1_acertado = True  
+                pato_pos = [20, 300]   
+                pato_lancado = False 
 
-        # Desenhando a imagem de fundo
-        screen.blit(background, (0, 0))
+            if colisao(pato_rect, gato2_rect) and not gato2_acertado:
+                gato2_acertado = True
+                pato_pos = [20, 300]   
+                pato_lancado = False 
 
-        # Desenhando a lua
-        screen.blit(lua_redimensionado, (50,40))
+            # Atualizando a tela
+            pygame.display.flip()
 
-        # Desenhando a trajetória pontilhada antes do lançamento
-        if not pato_lancado:
-            # Obtendo a posição atual do mouse para desenhar a trajetória
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            delta_x = mouse_x - pato_pos[0]
-            delta_y = mouse_y - pato_pos[1]
-            angulo = math.atan2(delta_y, delta_x)
+    # Encerrando o pygame
+    pygame.quit()
 
-            # Desenhar a trajetória pontilhada
-            desenhar_trajetoria(screen, pato_pos, angulo, 0.5, gravidade)
+if __name__== "__main__":
+    main() 
 
-        # Desenhando o pato na tela após desenhar a trajetória
-        screen.blit(pato_redimensionado, pato_pos)
-
-        # Desenhando os personagens na tela e verificando se o gato foi acertado
-        if gato1_acertado:
-            screen.blit(gatinho_perdendo_redimensionado, gato1_pos)
-        else:
-            screen.blit(gato1_redimensionado, gato1_pos)
-
-        if gato2_acertado:
-            screen.blit(gatinho_perdendo_redimensionado, gato2_pos)
-        else:
-            screen.blit(gato2_redimensionado, gato2_pos)
-
-        # Retangulo de colisão para o pato e os gatos
-        pato_rect = pygame.Rect(pato_pos[0], pato_pos[1], 50, 50)
-        gato1_rect = pygame.Rect(gato1_pos[0], gato1_pos[1], 50, 50)
-        gato2_rect = pygame.Rect(gato2_pos[0], gato2_pos[1], 50, 50)
-
-        # Verificar colisões
-        if colisao(pato_rect, gato1_rect) and not gato1_acertado:
-            gato1_acertado = True  
-            pato_pos = [20, 300]   
-            pato_lancado = False 
-
-        if colisao(pato_rect, gato2_rect) and not gato2_acertado:
-            gato2_acertado = True
-            pato_pos = [20, 300]   
-            pato_lancado = False 
-
-        # Atualizando a tela
-        pygame.display.flip()
-
-# Encerrando o pygame
-pygame.quit()

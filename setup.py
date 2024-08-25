@@ -22,7 +22,7 @@ setup(
     python_requires='>=3.11',
     entry_points={
         'console_scripts': [
-            'ana_patinho_vs_gatinho=jogo.tela_jogo',
+            'ana_patinho_vs_gatinho=jogo.tela_jogo:main',
         ],
     },
     install_requires=[  # Instala as dependências especificadas no requirements.txt
