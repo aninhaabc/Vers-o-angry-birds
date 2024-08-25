@@ -5,9 +5,9 @@ def tela_inicial(screen):
     screen.fill((16,16,73))
 
     # Carrega as imagens
-    gatinho_img = pygame.image.load("imagens/gatinho_menu.png")
-    patinho_img = pygame.image.load("imagens/patinho_menu.png")
-    botao_play_img = pygame.image.load("imagens/botao_de_play.png")
+    gatinho_img = pygame.image.load("jogo/imagens/gatinho_menu.png")
+    patinho_img = pygame.image.load("jogo/imagens/patinho_menu.png")
+    botao_play_img = pygame.image.load("jogo/imagens/botao_de_play.png")
 
     # Redimensiona as imagens se necessário
     gatinho_img = pygame.transform.scale(gatinho_img, (100, 100))  # Exemplo de tamanho
@@ -20,7 +20,7 @@ def tela_inicial(screen):
     screen.blit(botao_play_img, (180, 250))  
 
     # Definindo a fonte e os textos
-    fonte_titulo = pygame.font.Font("fonte/minecraftia/Minecraftia-Regular.ttf", 30)
+    fonte_titulo = pygame.font.Font("jogo/fonte/minecraftia/Minecraftia-Regular.ttf", 30)
 
     titulo_texto = fonte_titulo.render("Patinho vs Gatinho", True, (255, 255, 255))
 

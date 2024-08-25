@@ -46,26 +46,26 @@ def main():
     pygame.display.set_caption("Patinho vs gatinho")
 
     # Carregando a imagem de fundo
-    background = pygame.image.load('imagens/fundo.jpg')
+    background = pygame.image.load('jogo/imagens/fundo.jpg')
 
     # Carregando o personagem pato
-    pato = pygame.image.load('imagens/patinho.png')
+    pato = pygame.image.load('jogo/imagens/patinho.png')
     pato_redimensionado = pygame.transform.scale(pato, (60, 60))
 
     # Carregando o personagem gato 1 e 2
-    gato1 = pygame.image.load('imagens/gatinho_sentado.png')
+    gato1 = pygame.image.load('jogo/imagens/gatinho_sentado.png')
     gato1_redimensionado = pygame.transform.scale(gato1,(50,50))
     screen.blit(gato1_redimensionado, (270,170))
 
-    gato2 = pygame.image.load('imagens/gatinho_sentado.png')
+    gato2 = pygame.image.load('jogo/imagens/gatinho_sentado.png')
     gato2_redimensionado = pygame.transform.scale(gato2,(50,50))
 
     # Carregando a imagem "gatinho perdendo"
-    gatinho_perdendo = pygame.image.load('imagens/gatinho_perdendo.png')
+    gatinho_perdendo = pygame.image.load('jogo/imagens/gatinho_perdendo.png')
     gatinho_perdendo_redimensionado = pygame.transform.scale(gatinho_perdendo, (50, 50))
 
     # Carregando a imagem da lua 
-    lua = pygame.image.load('imagens/lua.png')
+    lua = pygame.image.load('jogo/imagens/lua.png')
     lua_redimensionado = pygame.transform.scale(lua, (60,60))
 
     # Definindo posições dos gatinhos
