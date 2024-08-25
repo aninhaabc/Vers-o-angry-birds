@@ -10,7 +10,7 @@ def package_files(directory):
     paths = []
     for (path, _ , filenames) in os.walk(directory):
         for filename in filenames:
-            paths.append(os.path.realpath(os.path.join(path,filename), 'jogo'))
+            paths.append(os.path.relpath(os.path.join(path,filename), 'jogo'))
     return paths
 
 imagens_file = package_files('jogo/imagens')
