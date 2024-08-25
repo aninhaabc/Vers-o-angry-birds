@@ -43,6 +43,6 @@ setup(
 
     include_package_data=True,
     package_data={
-        '': imagens_files + fonte_files
+        '': imagens_file + fonte_file
     }
 )
