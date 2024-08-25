@@ -13,8 +13,8 @@ def package_files(directory):
             paths.append(os.path.join(path,filename))
     return paths
 
-imagens_file = package_files('imagens')
-fonte_file = package_files('fonte')
+imagens_file = package_files('jogo/imagens')
+fonte_file = package_files('jogo/fonte')
 
 setup(
     name="Versao-angry-birds",  # Substitua pelo nome do seu pacote   
