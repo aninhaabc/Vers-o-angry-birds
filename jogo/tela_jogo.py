@@ -25,11 +25,14 @@ screen.blit(gato1_redimensionado, (270,170))
 
 gato2 = pygame.image.load('imagens/gatinho_sentado.png')
 gato2_redimensionado = pygame.transform.scale(gato2,(50,50))
-# screen.blit(gato2_redimensionado, (270,170))
 
 # Carregando a imagem "gatinho perdendo"
 gatinho_perdendo = pygame.image.load('imagens/gatinho_perdendo.png')
 gatinho_perdendo_redimensionado = pygame.transform.scale(gatinho_perdendo, (50, 50))
+
+# Carregando a imagem da lua 
+lua = pygame.image.load('imagens/lua.png')
+lua_redimensionado = pygame.transform.scale(lua, (60,60))
 
 # Definindo posições dos gatinhos
 gato1_pos = [270,178]
@@ -41,10 +44,15 @@ pato_vel = [0, 0]
 pato_lancado = False  
 
 # Definindo a gravidade
-gravidade = 0.0005
+gravidade = 0.0004
 
 # Definindo a resistência do ar
-resistencia_ar = 1
+resistencia_ar = 1.000005
+
+# Variáveis da gravidade da lua
+lua_pos = [80, 80]
+forca_repulsao_lua = 0.00003
+ultimo_tempo_forca_lua = pygame.time.get_ticks()
 
 # Função para verificar colisão
 def colisao(pato_rect, gato_rect):
@@ -54,19 +62,31 @@ def colisao(pato_rect, gato_rect):
 gato1_acertado = False
 gato2_acertado = False
 
-
 # Função para desenhar a trajetória pontilhada
 def desenhar_trajetoria(screen, start_pos, angle, velocidade_inicial, gravidade):
-    num_pontos = 30  
-    distancia_entre_pontos = 100  
+    num_pontos = 30
+    distancia_entre_pontos = 100
     for i in range(num_pontos):
         # Calculando a posição futura do pato com base no ângulo e velocidade
-        t = i * distancia_entre_pontos / 50   
-        futuro_x = start_pos[0] + math.cos(angle) * velocidade_inicial * t * 30
-        futuro_y = start_pos[1] + math.sin(angle) * velocidade_inicial * t * 30 + 0.5 * gravidade * (t * 30) ** 2
+        trajetoria = (i * distancia_entre_pontos / 50) * 30
+        futuro_x = (start_pos[0] + 50) / 2 + math.cos(angle) * velocidade_inicial * trajetoria
+        futuro_y = start_pos[1] + 25 + math.sin(angle) * velocidade_inicial * trajetoria + 0.5 * gravidade * (trajetoria) ** 2
 
         # Desenhar um pequeno círculo para simular o ponto
         pygame.draw.circle(screen, (255, 255, 255), (int(futuro_x), int(futuro_y)), 3)
+
+# Função para aplicar a repulsão gravitacional da lua
+def aplicar_repulsao_lua(pato_pos, pato_vel):
+    delta_x = pato_pos[0] - lua_pos[0]
+    delta_y = pato_pos[1] - lua_pos[1]
+    distancia = math.sqrt(delta_x ** 2 + delta_y ** 2)
+    
+    if distancia != 0:  # Evita divisão por zero
+        forca_x = (delta_x / distancia) * forca_repulsao_lua
+        forca_y = (delta_y / distancia) * forca_repulsao_lua
+
+        pato_vel[0] += forca_x
+        pato_vel[1] += forca_y
 
 # Loop principal
 running = True
@@ -114,19 +134,28 @@ while running:
             # Aplica resistencia do ar
             pato_vel[0] *= resistencia_ar
             pato_vel[1] *= resistencia_ar
-            
+
+            # Verifica o tempo atual para aplicar a gravidade da lua periodicamente
+            tempo_atual = pygame.time.get_ticks()
+            if tempo_atual - ultimo_tempo_forca_lua :
+                aplicar_repulsao_lua(pato_pos, pato_vel)
+                ultimo_tempo_repulsao_lua = tempo_atual  # Atualiza o tempo da última aplicação de gravidade da lua
+
             # Atualiza a posição do pato com base na velocidade
             pato_pos[0] += pato_vel[0]
             pato_pos[1] += pato_vel[1]
 
             # Verifica se o pato saiu da tela e reseta
             if pato_pos[1] > 443 or pato_pos[0] > 564:
-                pato_pos = [50, 300]
+                pato_pos = [20, 300]
                 pato_vel = [0, 0]
                 pato_lancado = False
 
         # Desenhando a imagem de fundo
         screen.blit(background, (0, 0))
+
+        # Desenhando a lua
+        screen.blit(lua_redimensionado, (50,40))
 
         # Desenhando a trajetória pontilhada antes do lançamento
         if not pato_lancado:
@@ -161,12 +190,12 @@ while running:
         # Verificar colisões
         if colisao(pato_rect, gato1_rect) and not gato1_acertado:
             gato1_acertado = True  
-            pato_pos = [50, 300]   
+            pato_pos = [20, 300]   
             pato_lancado = False 
 
         if colisao(pato_rect, gato2_rect) and not gato2_acertado:
             gato2_acertado = True
-            pato_pos = [50, 300]   
+            pato_pos = [20, 300]   
             pato_lancado = False 
 
         # Atualizando a tela
