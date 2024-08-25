@@ -2,65 +2,12 @@ import pygame
 import math
 from jogo.tela_inicial import tela_inicial
 
-# Inicializando pygame
-pygame.init()
-
-jogo_iniciado = False
-
-# Configurando a tela
-screen = pygame.display.set_mode((564,443))
-pygame.display.set_caption("Patinho vs gatinho")
-
-# Carregando a imagem de fundo
-background = pygame.image.load('jogo/imagens/fundo.jpg')
-
-# Carregando o personagem pato
-pato = pygame.image.load('jogo/imagens/patinho.png')
-pato_redimensionado = pygame.transform.scale(pato, (60, 60))
-
-# Carregando o personagem gato 1 e 2
-gato1 = pygame.image.load('jogo/imagens/gatinho_sentado.png')
-gato1_redimensionado = pygame.transform.scale(gato1,(50,50))
-screen.blit(gato1_redimensionado, (270,170))
-
-gato2 = pygame.image.load('jogo/imagens/gatinho_sentado.png')
-gato2_redimensionado = pygame.transform.scale(gato2,(50,50))
-
-# Carregando a imagem "gatinho perdendo"
-gatinho_perdendo = pygame.image.load('jogo/imagens/gatinho_perdendo.png')
-gatinho_perdendo_redimensionado = pygame.transform.scale(gatinho_perdendo, (50, 50))
-
-# Carregando a imagem da lua 
-lua = pygame.image.load('jogo/imagens/lua.png')
-lua_redimensionado = pygame.transform.scale(lua, (60,60))
-
-# Definindo posições dos gatinhos
-gato1_pos = [270,178]
-gato2_pos = [420,102]
-
-# Definindo variáveis para o pato
-pato_pos = [20, 300]  
-pato_vel = [0, 0]     
-pato_lancado = False  
-
-# Definindo a gravidade
-gravidade = 0.0004
-
-# Definindo a resistência do ar
-resistencia_ar = 1.000005
-
-# Variáveis da gravidade da lua
 lua_pos = [80, 80]
 forca_repulsao_lua = 0.00003
-ultimo_tempo_forca_lua = pygame.time.get_ticks()
 
 # Função para verificar colisão
 def colisao(pato_rect, gato_rect):
     return pato_rect.colliderect(gato_rect)
-
-# Inicializando o estado dos gatos
-gato1_acertado = False
-gato2_acertado = False
 
 # Função para desenhar a trajetória pontilhada
 def desenhar_trajetoria(screen, start_pos, angle, velocidade_inicial, gravidade):
@@ -89,6 +36,61 @@ def aplicar_repulsao_lua(pato_pos, pato_vel):
         pato_vel[1] += forca_y
 
 def main():
+    # Inicializando pygame
+    pygame.init()
+
+    jogo_iniciado = False
+
+    # Configurando a tela
+    screen = pygame.display.set_mode((564,443))
+    pygame.display.set_caption("Patinho vs gatinho")
+
+    # Carregando a imagem de fundo
+    background = pygame.image.load('imagens/fundo.jpg')
+
+    # Carregando o personagem pato
+    pato = pygame.image.load('imagens/patinho.png')
+    pato_redimensionado = pygame.transform.scale(pato, (60, 60))
+
+    # Carregando o personagem gato 1 e 2
+    gato1 = pygame.image.load('imagens/gatinho_sentado.png')
+    gato1_redimensionado = pygame.transform.scale(gato1,(50,50))
+    screen.blit(gato1_redimensionado, (270,170))
+
+    gato2 = pygame.image.load('imagens/gatinho_sentado.png')
+    gato2_redimensionado = pygame.transform.scale(gato2,(50,50))
+
+    # Carregando a imagem "gatinho perdendo"
+    gatinho_perdendo = pygame.image.load('imagens/gatinho_perdendo.png')
+    gatinho_perdendo_redimensionado = pygame.transform.scale(gatinho_perdendo, (50, 50))
+
+    # Carregando a imagem da lua 
+    lua = pygame.image.load('imagens/lua.png')
+    lua_redimensionado = pygame.transform.scale(lua, (60,60))
+
+    # Definindo posições dos gatinhos
+    gato1_pos = [270,178]
+    gato2_pos = [420,102]
+
+    # Definindo variáveis para o pato
+    pato_pos = [20, 300]  
+    pato_vel = [0, 0]     
+    pato_lancado = False  
+
+    # Definindo a gravidade
+    gravidade = 0.0004
+
+    # Definindo a resistência do ar
+    resistencia_ar = 1.000005
+
+    # Variáveis da gravidade da lua
+    
+    ultimo_tempo_forca_lua = pygame.time.get_ticks()
+
+    # Inicializando o estado dos gatos
+    gato1_acertado = False
+    gato2_acertado = False
+
     # Loop principal
     running = True
     while running:
