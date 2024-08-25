@@ -1,6 +1,6 @@
 import pygame
 import math
-from tela_inicial import tela_inicial
+from jogo.tela_inicial import tela_inicial
 
 # Inicializando pygame
 pygame.init()
