@@ -3,15 +3,12 @@
 **Versão:** 1.0  
 **Desenvolvido por:** Ana Beatriz da Cunha
 
----
-
 ## 📝 Descrição
 
 **Patinho vs Gatinho - Space Edition** é um jogo inspirado no famoso Angry Birds, mas ambientado no espaço! O jogador deve usar um canhão para lançar um patinho em direção a gatinhos estrategicamente posicionados, desviando de obstáculos gravitacionais, como a Lua, que aplica forças de repulsão no pato. O objetivo é acertar todos os gatinhos no menor número de tentativas possível.
 
 Este jogo combina física realista, álgebra linear, resistência do ar e forças gravitacionais para criar uma experiência desafiadora e divertida.
 
----
 
 ## 🎮 Como Jogar
 
@@ -30,7 +27,6 @@ Este jogo combina física realista, álgebra linear, resistência do ar e força
 5. **Resistência do Ar e Gravidade:**  
    A trajetória do patinho é afetada por resistência do ar e gravidade, criando uma simulação realista do movimento no espaço.
 
----
 
 ## 📚 Instruções de Instalação
 
@@ -56,21 +52,24 @@ Este jogo combina física realista, álgebra linear, resistência do ar e força
 3. **Executar o jogo**
     ```bash
     ana_patinho_vs_gatinho
------
 
 ## 📽️ Vídeo Explicativo
 Confira o vídeo explicativo sobre a matemática e a física por trás do jogo e veja o gameplay:
 
 Link para o Vídeo no YouTube
-----
 
 ## 💻 Estrutura do Código
 A estrutura do código está dividida em módulos para facilitar o desenvolvimento e manutenção:
 
 - jogo/: Contém os arquivos principais do jogo.
+
         - tela_inicial.py: Código responsável pela tela de abertura.
+
         - tela_final.py: Código responsável pela tela final de vitória.
+
         - tela_jogo.py: Lógica principal do jogo, contendo a física do lançamento, detecção de colisões, e aplicação das forças.
+
         - imagens: Imagens principais do jogo
+
         - fonte: Contém a fonte do jogo
 
