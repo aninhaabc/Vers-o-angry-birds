@@ -56,7 +56,7 @@ Este jogo combina física realista, álgebra linear, resistência do ar e força
 ## 📽️ Vídeo Explicativo
 Confira o vídeo explicativo sobre a matemática e a física por trás do jogo e veja o gameplay:
 
-Link para o Vídeo no YouTube
+Link para o Vídeo no YouTube: https://youtu.be/AcF494L1ilg
 
 ## 💻 Estrutura do Código
 A estrutura do código está dividida em módulos para facilitar o desenvolvimento e manutenção:
