@@ -1,7 +1,9 @@
 import pygame
 import math
-from jogo.tela_inicial import tela_inicial
-from jogo.tela_final import tela_final
+import os
+from pathlib import Path
+from angrybirds.tela_inicial import tela_inicial
+from angrybirds.tela_final import tela_final
 
 lua_pos = [80, 80]
 gravidade_lua = 0.008
@@ -39,6 +41,9 @@ def aplicar_repulsao_lua(pato_pos, pato_vel):
         pato_vel[1] += forca_y
 
 def main():
+    script_path = Path(os.path.abspath(__file__))
+    parent_path = script_path.parent
+
     # Inicializando pygame
     pygame.init()
 
@@ -50,26 +55,26 @@ def main():
     pygame.display.set_caption("Patinho vs gatinho")
 
     # Carregando a imagem de fundo
-    background = pygame.image.load('jogo/imagens/fundo.jpg')
+    background = pygame.image.load(parent_path /'assets/imagens/fundo.jpg')
 
     # Carregando o personagem pato
-    pato = pygame.image.load('jogo/imagens/patinho.png')
+    pato = pygame.image.load(parent_path /'assets/imagens/patinho.png')
     pato_redimensionado = pygame.transform.scale(pato, (60, 60))
 
     # Carregando o personagem gato 1 e 2
-    gato1 = pygame.image.load('jogo/imagens/gatinho_sentado.png')
+    gato1 = pygame.image.load(parent_path / 'assets/imagens/gatinho_sentado.png')
     gato1_redimensionado = pygame.transform.scale(gato1,(50,50))
     screen.blit(gato1_redimensionado, (270,170))
 
-    gato2 = pygame.image.load('jogo/imagens/gatinho_sentado.png')
+    gato2 = pygame.image.load(parent_path / 'assets/imagens/gatinho_sentado.png')
     gato2_redimensionado = pygame.transform.scale(gato2,(50,50))
 
     # Carregando a imagem "gatinho perdendo"
-    gatinho_perdendo = pygame.image.load('jogo/imagens/gatinho_perdendo.png')
+    gatinho_perdendo = pygame.image.load(parent_path / 'assets/imagens/gatinho_perdendo.png')
     gatinho_perdendo_redimensionado = pygame.transform.scale(gatinho_perdendo, (50, 50))
 
     # Carregando a imagem da lua 
-    lua = pygame.image.load('jogo/imagens/lua.png')
+    lua = pygame.image.load(parent_path / 'assets/imagens/lua.png')
     lua_redimensionado = pygame.transform.scale(lua, (60,60))
 
     # Definindo posições dos gatinhos

@@ -1,0 +1,2 @@
+[console_scripts]
+ana_patinho_vs_gatinho = angrybirds.tela_jogo:main
