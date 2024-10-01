@@ -11,7 +11,7 @@ def find_subdir(start_dir):
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-MODULE_STUB = "angrypabirds"
+MODULE_STUB = "angrybirds"
 
 setup(
     name=MODULE_STUB,  # Substitua pelo nome do seu pacote   
